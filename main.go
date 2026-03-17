@@ -15,21 +15,27 @@ const appName = "tuck"
 const usage = `tuck - project-aware scratchpad for developers
 
 usage:
-  tuck note <text>     save a note
-  tuck cmd  <text>     save a command
-  tuck todo <text>     save a todo item
-  tuck warn <text>     save a warning
+  tuck note <text>       save a note
+  tuck cmd  <text>       save a command
+  tuck todo <text>       save a todo item
+  tuck warn <text>       save a warning
+  tuck snap              snapshot current env (branch, ports, runtimes)
 
-  tuck ls              list all entries for current project
-  tuck run <id>        run a saved command
-  tuck done <id>       mark todo as done / undone
-  tuck rm <id>         remove an entry
-  tuck clear           remove all entries for current project
+  tuck ls                list all entries for current project
+  tuck run <id>          run a saved command
+  tuck done <id>         mark todo as done / undone
+  tuck rm <id>           remove an entry
+  tuck clear             remove all entries for current project
 
-  tuck grep <term>     search across all projects
-  tuck summary         show one-line summary (for shell prompt)
+  tuck grep <term>       search across all projects
+  tuck summary           show one-line summary (for shell prompt)
 
-  tuck version        show version
+  tuck team              show team mode status
+  tuck team on           enable team mode (share notes via git)
+  tuck team off          disable team mode
+  tuck team sync         merge teammates notes after git pull
+
+  tuck version           show version
 `
 
 func main() {
@@ -60,6 +66,10 @@ func main() {
 		cmdGrep(rest)
 	case "summary":
 		cmdSummary()
+	case "snap":
+		cmdSnap()
+	case "team":
+		cmdTeam(rest)
 	case "version", "--version", "-v":
 		fmt.Printf("tuck %s\n", version)
 	case "help", "--help", "-h":
