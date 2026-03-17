@@ -65,7 +65,7 @@ func main() {
 	case "help", "--help", "-h":
 		printHelp()
 	default:
-		// treat as shorthand: jot "text" → jot note "text"
+		// treat as shorthand: tuck "text" → jot note "text"
 		if len(cmd) > 0 && cmd[0] != '-' {
 			cmdAdd(TypeNote, args)
 		} else {
