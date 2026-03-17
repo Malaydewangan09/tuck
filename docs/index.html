@@ -383,12 +383,20 @@
   <section>
     <h2>Install</h2>
     <div class="install-block">
-      <div class="step">macOS / Linux — download binary</div>
-      <code>curl -Lo tuck https://github.com/Malaydewangan09/tuck/releases/latest/download/tuck-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m)</code>
+      <div class="step">macOS (Apple Silicon)</div>
+      <code>curl -Lo tuck https://github.com/Malaydewangan09/tuck/releases/latest/download/tuck-darwin-arm64</code>
+      <code>chmod +x tuck && sudo mv tuck /usr/local/bin/</code>
+
+      <div class="step">macOS (Intel)</div>
+      <code>curl -Lo tuck https://github.com/Malaydewangan09/tuck/releases/latest/download/tuck-darwin-x86_64</code>
+      <code>chmod +x tuck && sudo mv tuck /usr/local/bin/</code>
+
+      <div class="step">Linux (amd64)</div>
+      <code>curl -Lo tuck https://github.com/Malaydewangan09/tuck/releases/latest/download/tuck-linux-x86_64</code>
       <code>chmod +x tuck && sudo mv tuck /usr/local/bin/</code>
 
       <div class="step">build from source</div>
-      <code>git clone https://github.com/malaydewangan09/tuck</code>
+      <code>git clone https://github.com/Malaydewangan09/tuck</code>
       <code>cd tuck && go build -o tuck . && sudo mv tuck /usr/local/bin/</code>
     </div>
   </section>
