@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tuck — project-aware scratchpad for developers</title>
+  <meta name="description" content="tuck things away in your terminal. Notes, commands, todos, and warnings tied to your project directory." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0e0e0e;
+      --surface:  #161616;
+      --border:   #252525;
+      --muted:    #555;
+      --text:     #d4d4d4;
+      --bright:   #f0f0f0;
+      --note:     #22d3ee;
+      --cmd:      #4ade80;
+      --todo:     #818cf8;
+      --warn:     #fbbf24;
+      --accent:   #f0f0f0;
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      line-height: 1.7;
+      padding: 0 1.5rem;
+    }
+
+    a { color: var(--bright); text-decoration: underline; text-underline-offset: 3px; }
+    a:hover { color: var(--note); }
+
+    .wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 5rem 0 6rem;
+    }
+
+    /* header */
+    header { margin-bottom: 3.5rem; }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--bright);
+      letter-spacing: -1px;
+    }
+
+    .tagline {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 0.4rem;
+    }
+
+    .badges {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.2rem;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+    }
+
+    /* sections */
+    section { margin-bottom: 3rem; }
+
+    h2 {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+    }
+
+    p {
+      color: var(--text);
+      font-size: 0.92rem;
+      line-height: 1.8;
+      margin-bottom: 0.8rem;
+    }
+
+    /* types grid */
+    .types {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .type-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.9rem 1rem;
+    }
+
+    .type-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+
+    .type-card p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .type-card.note .type-label { color: var(--note); }
+    .type-card.cmd  .type-label { color: var(--cmd);  }
+    .type-card.todo .type-label { color: var(--todo); }
+    .type-card.warn .type-label { color: var(--warn); }
+
+    /* terminal */
+    .term {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+
+    .term-bar {
+      background: var(--border);
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--muted);
+    }
+
+    .term-body {
+      padding: 1.2rem 1.4rem;
+      font-size: 0.82rem;
+      line-height: 2;
+      overflow-x: auto;
+    }
+
+    .term-body pre { white-space: pre; }
+
+    .c-prompt { color: var(--muted); }
+    .c-cmd    { color: var(--bright); }
+    .c-note   { color: var(--note); }
+    .c-cmd-t  { color: var(--cmd); }
+    .c-todo   { color: var(--todo); }
+    .c-warn   { color: var(--warn); }
+    .c-dim    { color: var(--muted); }
+    .c-bold   { font-weight: 700; }
+
+    /* install */
+    .install-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.2rem 1.4rem;
+      font-size: 0.82rem;
+      margin: 0.75rem 0;
+    }
+
+    .install-block .step {
+      color: var(--muted);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.4rem;
+      margin-top: 1rem;
+    }
+
+    .install-block .step:first-child { margin-top: 0; }
+
+    .install-block code {
+      color: var(--bright);
+      display: block;
+    }
+
+    /* commands table */
+    .cmd-list {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      margin-top: 0.5rem;
+    }
+
+    .cmd-list tr {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cmd-list tr:last-child { border-bottom: none; }
+
+    .cmd-list td {
+      padding: 0.55rem 0;
+      vertical-align: top;
+    }
+
+    .cmd-list td:first-child {
+      color: var(--bright);
+      width: 55%;
+      padding-right: 1rem;
+    }
+
+    .cmd-list td:last-child {
+      color: var(--muted);
+    }
+
+    /* shell hook */
+    .hook-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--warn);
+      border-radius: 0 6px 6px 0;
+      padding: 1rem 1.2rem;
+      font-size: 0.82rem;
+      margin: 0.75rem 0;
+    }
+
+    .hook-box .hook-title {
+      color: var(--warn);
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+
+    .hook-box code {
+      color: var(--bright);
+      display: block;
+      margin-top: 0.4rem;
+    }
+
+    .hook-box .hook-desc {
+      color: var(--muted);
+      font-size: 0.78rem;
+      margin-top: 0.5rem;
+    }
+
+    /* footer */
+    footer {
+      margin-top: 4rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.78rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    @media (max-width: 480px) {
+      .types { grid-template-columns: 1fr; }
+      .wrap { padding: 3rem 0 4rem; }
+      .logo { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="logo">tuck</div>
+    <div class="tagline">project-aware scratchpad for developers</div>
+    <div class="badges">
+      <span class="badge">v0.1.0</span>
+      <span class="badge">Go</span>
+      <span class="badge">single binary</span>
+      <span class="badge">zero dependencies</span>
+      <span class="badge">macOS · Linux</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>What is it</h2>
+    <p>
+      Every project has things that never make it into the README. Quirks,
+      workarounds, useful commands, warnings for teammates. They end up in
+      Slack, Notion, or forgotten entirely.
+    </p>
+    <p>
+      <strong style="color:var(--bright)">tuck</strong> keeps them next to the project, in your terminal,
+      always a single command away.
+    </p>
+
+    <div class="types">
+      <div class="type-card note">
+        <div class="type-label">note</div>
+        <p>Things worth remembering about this project</p>
+      </div>
+      <div class="type-card cmd">
+        <div class="type-label">cmd</div>
+        <p>Useful commands you can run directly by ID</p>
+      </div>
+      <div class="type-card todo">
+        <div class="type-label">todo</div>
+        <p>Tasks with done/undone toggle</p>
+      </div>
+      <div class="type-card warn">
+        <div class="type-label">warn</div>
+        <p>Warnings — shown first, hard to miss</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>See it in action</h2>
+
+    <div class="term">
+      <div class="term-bar"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <div class="term-body"><pre>
+<span class="c-prompt">$</span> <span class="c-cmd">tuck note "postgres runs on 5433 here, not default"</span>
+<span class="c-note c-bold">NOTE</span> saved  <span class="c-dim">#1</span>
+
+<span class="c-prompt">$</span> <span class="c-cmd">tuck warn "dont touch auth.js, sarah is refactoring it"</span>
+<span class="c-warn c-bold">WARN</span> saved  <span class="c-dim">#2</span>
+
+<span class="c-prompt">$</span> <span class="c-cmd">tuck cmd  "docker run -p 5432:5432 postgres:15"</span>
+<span class="c-cmd-t c-bold">CMD</span>  saved  <span class="c-dim">#3</span>
+
+<span class="c-prompt">$</span> <span class="c-cmd">tuck todo "add rate limiting to /api/login"</span>
+<span class="c-todo c-bold">TODO</span> saved  <span class="c-dim">#4</span></pre>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="term-bar"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <div class="term-body"><pre>
+<span class="c-prompt">$</span> <span class="c-cmd">tuck ls</span>
+
+<span class="c-bold" style="color:#f0f0f0">backend</span>  <span class="c-dim">/home/user/projects/backend</span>
+
+<span class="c-warn c-bold">WARNS</span>
+  <span class="c-warn c-bold">2</span>  dont touch auth.js, sarah is refactoring it   <span class="c-dim">2h ago</span>
+
+<span class="c-todo c-bold">TODOS</span>
+  <span class="c-todo c-bold">4</span>  [ ] add rate limiting to /api/login             <span class="c-dim">1h ago</span>
+
+<span class="c-cmd-t c-bold">CMDS</span>
+  <span class="c-cmd-t c-bold">3</span>  docker run -p 5432:5432 postgres:15             <span class="c-dim">1h ago</span>
+
+<span class="c-note c-bold">NOTES</span>
+  <span class="c-note c-bold">1</span>  postgres runs on 5433 here, not default         <span class="c-dim">3h ago</span></pre>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="term-bar"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <div class="term-body"><pre>
+<span class="c-prompt">$</span> <span class="c-cmd">tuck run 3</span>
+<span class="c-dim">$ docker run -p 5432:5432 postgres:15</span>
+
+<span class="c-prompt">$</span> <span class="c-cmd">tuck done 4</span>
+<span class="c-cmd-t c-bold">[x] done</span>
+
+<span class="c-prompt">$</span> <span class="c-cmd">tuck grep postgres</span>
+<span class="c-bold" style="color:#f0f0f0">backend</span>  <span class="c-dim">/home/user/projects/backend</span>
+  <span class="c-note c-bold">1</span>  postgres runs on 5433 here, not default  <span class="c-dim">3h ago</span>
+
+<span class="c-bold" style="color:#f0f0f0">infra</span>  <span class="c-dim">/home/user/projects/infra</span>
+  <span class="c-note c-bold">2</span>  postgres maxmemory bumped to 2gb           <span class="c-dim">2d ago</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Install</h2>
+    <div class="install-block">
+      <div class="step">macOS / Linux — download binary</div>
+      <code>curl -Lo tuck https://github.com/malaydewangan09/tuck/releases/latest/download/tuck-$(uname -s | tr A-Z a-z)-$(uname -m)</code>
+      <code>chmod +x tuck && sudo mv tuck /usr/local/bin/</code>
+
+      <div class="step">build from source</div>
+      <code>git clone https://github.com/malaydewangan09/tuck</code>
+      <code>cd tuck && go build -o tuck . && sudo mv tuck /usr/local/bin/</code>
+    </div>
+  </section>
+
+  <section>
+    <h2>Commands</h2>
+    <table class="cmd-list">
+      <tr><td>tuck note "text"</td><td>save a note</td></tr>
+      <tr><td>tuck cmd  "text"</td><td>save a runnable command</td></tr>
+      <tr><td>tuck todo "text"</td><td>save a todo item</td></tr>
+      <tr><td>tuck warn "text"</td><td>save a warning</td></tr>
+      <tr><td>tuck ls</td><td>list all entries for current project</td></tr>
+      <tr><td>tuck run &lt;id&gt;</td><td>execute a saved command</td></tr>
+      <tr><td>tuck done &lt;id&gt;</td><td>toggle todo done / undone</td></tr>
+      <tr><td>tuck rm &lt;id&gt;</td><td>remove an entry</td></tr>
+      <tr><td>tuck clear</td><td>clear all entries for current project</td></tr>
+      <tr><td>tuck grep &lt;term&gt;</td><td>search across all projects</td></tr>
+      <tr><td>tuck summary</td><td>one-line count (for shell prompt)</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Shell hook</h2>
+    <p>Add to your <code style="color:var(--bright)">~/.zshrc</code> or <code style="color:var(--bright)">~/.bashrc</code> to see a summary every time you enter a project:</p>
+
+    <div class="hook-box">
+      <div class="hook-title">tip</div>
+      <code>function cd() { builtin cd "$@" && tuck summary; }</code>
+      <div class="hook-desc">
+        Every time you cd into a project you'll automatically see:<br>
+        <span style="color:var(--warn)">1 warn</span> &nbsp;
+        <span style="color:var(--todo)">2 todo</span> &nbsp;
+        <span style="color:var(--cmd)">1 cmd</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>How it works</h2>
+    <p>
+      Each project stores a <code style="color:var(--bright)">.tuck</code> file in its root directory.
+      A global index at <code style="color:var(--bright)">~/.tuck-index</code> enables cross-project search.
+      No daemon, no server, no cloud. Just files.
+    </p>
+  </section>
+
+  <footer>
+    <span>tuck v0.1.0 — <a href="https://github.com/malaydewangan09/tuck">github</a></span>
+    <span>built by <a href="https://github.com/malaydewangan09">malaydewangan09</a></span>
+  </footer>
+
+</div>
+</body>
+</html>
