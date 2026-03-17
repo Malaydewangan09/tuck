@@ -149,6 +149,6 @@ func printSummary(entries []Entry) {
 	}
 
 	if len(parts) > 0 {
-		fmt.Printf("%sjot:%s %s\n", dim, reset, strings.Join(parts, "  "))
+		fmt.Printf("%stuck:%s %s\n", dim, reset, strings.Join(parts, "  "))
 	}
 }
