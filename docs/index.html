@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tuck: project-aware scratchpad for developers</title>
   <meta name="description" content="tuck things away in your terminal. Notes, commands, todos, and warnings tied to your project directory." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -125,6 +126,9 @@
     .type-card.cmd  .type-label { color: var(--cmd);  }
     .type-card.todo .type-label { color: var(--todo); }
     .type-card.warn .type-label { color: var(--warn); }
+    .type-card.snap .type-label { color: var(--snap); }
+
+    :root { --snap: #d946ef; }
 
     /* terminal */
     .term {
@@ -281,7 +285,7 @@
     <div class="logo">tuck</div>
     <div class="tagline">project-aware scratchpad for developers</div>
     <div class="badges">
-      <span class="badge">v0.1.0</span>
+      <span class="badge">v0.2.0</span>
       <span class="badge">Go</span>
       <span class="badge">single binary</span>
       <span class="badge">zero dependencies</span>
@@ -315,7 +319,11 @@
       </div>
       <div class="type-card warn">
         <div class="type-label">warn</div>
-        <p>Warnings — shown first, hard to miss</p>
+        <p>Warnings, shown first, hard to miss</p>
+      </div>
+      <div class="type-card snap">
+        <div class="type-label">snap</div>
+        <p>Snapshot of current branch, ports, and runtime versions</p>
       </div>
     </div>
   </section>
@@ -378,6 +386,23 @@
   <span class="c-note c-bold">2</span>  postgres maxmemory bumped to 2gb           <span class="c-dim">2d ago</span></pre>
       </div>
     </div>
+
+    <div class="term">
+      <div class="term-bar"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <div class="term-body"><pre>
+<span class="c-prompt">$</span> <span class="c-cmd">tuck snap</span>
+<span style="color:var(--snap);font-weight:700">SNAP</span> saved  <span class="c-dim">#5</span>
+  <span class="c-dim">branch=main  ports=3000,5432,6379  node=20.11.0  go=1.21.0</span>
+
+<span class="c-prompt">$</span> <span class="c-cmd">tuck team on</span>
+<span class="c-cmd-t c-bold">team mode on</span>
+<span class="c-dim">commit .tuck to share notes with teammates.</span>
+<span class="c-dim">run tuck team sync after pulling to merge their notes.</span>
+
+<span class="c-prompt">$</span> <span class="c-cmd">tuck team sync</span>
+<span class="c-cmd-t c-bold">+3</span> entries synced from teammates</pre>
+      </div>
+    </div>
   </section>
 
   <section>
@@ -413,8 +438,11 @@
       <tr><td>tuck done &lt;id&gt;</td><td>toggle todo done / undone</td></tr>
       <tr><td>tuck rm &lt;id&gt;</td><td>remove an entry</td></tr>
       <tr><td>tuck clear</td><td>clear all entries for current project</td></tr>
+      <tr><td>tuck snap</td><td>snapshot current branch, ports, runtime versions</td></tr>
       <tr><td>tuck grep &lt;term&gt;</td><td>search across all projects</td></tr>
       <tr><td>tuck summary</td><td>one-line count (for shell prompt)</td></tr>
+      <tr><td>tuck team on / off</td><td>enable or disable team mode</td></tr>
+      <tr><td>tuck team sync</td><td>merge teammates notes after git pull</td></tr>
     </table>
   </section>
 
@@ -444,8 +472,8 @@
   </section>
 
   <footer>
-    <span>tuck v0.1.0 — <a href="https://github.com/malaydewangan09/tuck">github</a></span>
-    <span>built by <a href="https://github.com/malaydewangan09">malaydewangan09</a></span>
+    <span>tuck v0.2.0 · <a href="https://github.com/Malaydewangan09/tuck">github</a></span>
+    <span>built by <a href="https://github.com/Malaydewangan09">malaydewangan09</a></span>
   </footer>
 
 </div>
