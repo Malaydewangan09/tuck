@@ -14,6 +14,7 @@ const (
 	TypeCmd  EntryType = "cmd"
 	TypeTodo EntryType = "todo"
 	TypeWarn EntryType = "warn"
+	TypeSnap EntryType = "snap"
 )
 
 type Entry struct {

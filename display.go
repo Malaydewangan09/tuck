@@ -7,15 +7,16 @@ import (
 )
 
 const (
-	reset  = "\033[0m"
-	bold   = "\033[1m"
-	dim    = "\033[2m"
-	red    = "\033[31m"
-	green  = "\033[32m"
-	yellow = "\033[33m"
-	blue   = "\033[34m"
-	cyan   = "\033[36m"
-	white  = "\033[37m"
+	reset   = "\033[0m"
+	bold    = "\033[1m"
+	dim     = "\033[2m"
+	red     = "\033[31m"
+	green   = "\033[32m"
+	yellow  = "\033[33m"
+	blue    = "\033[34m"
+	magenta = "\033[35m"
+	cyan    = "\033[36m"
+	white   = "\033[37m"
 )
 
 func colorFor(t EntryType) string {
@@ -28,6 +29,8 @@ func colorFor(t EntryType) string {
 		return blue
 	case TypeWarn:
 		return yellow
+	case TypeSnap:
+		return magenta
 	}
 	return white
 }
@@ -42,6 +45,8 @@ func labelFor(t EntryType) string {
 		return "TODO"
 	case TypeWarn:
 		return "WARN"
+	case TypeSnap:
+		return "SNAP"
 	}
 	return "    "
 }
@@ -64,12 +69,12 @@ func relativeTime(t time.Time) string {
 
 func printEntries(entries []Entry) {
 	if len(entries) == 0 {
-		fmt.Printf("%s  nothing here yet. try: jot note \"something useful\"%s\n", dim, reset)
+		fmt.Printf("%s  nothing here yet. try: tuck note \"something useful\"%s\n", dim, reset)
 		return
 	}
 
 	groups := map[EntryType][]Entry{}
-	order := []EntryType{TypeWarn, TypeTodo, TypeCmd, TypeNote}
+	order := []EntryType{TypeWarn, TypeTodo, TypeCmd, TypeNote, TypeSnap}
 	for _, e := range entries {
 		groups[e.Type] = append(groups[e.Type], e)
 	}
