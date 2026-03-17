@@ -25,7 +25,7 @@ chmod +x tuck && sudo mv tuck /usr/local/bin/
 **Build from source**
 ```
 git clone https://github.com/Malaydewangan09/tuck
-cd tuck && go build -o tuck . && sudo mv tuck /usr/local/bin/
+cd tuck && go build -o tuck ./cmd/tuck/ && sudo mv tuck /usr/local/bin/
 ```
 
 ## Usage
