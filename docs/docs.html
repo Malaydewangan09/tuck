@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tuck: docs</title>
+  <meta name="description" content="Full documentation for tuck." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0e0e0e;
+      --surface: #161616;
+      --border:  #252525;
+      --muted:   #555;
+      --text:    #d4d4d4;
+      --bright:  #f0f0f0;
+      --note:    #22d3ee;
+      --cmd:     #4ade80;
+      --todo:    #818cf8;
+      --warn:    #fbbf24;
+      --snap:    #d946ef;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      line-height: 1.7;
+      padding: 0 1.5rem;
+    }
+
+    a { color: var(--bright); text-decoration: underline; text-underline-offset: 3px; }
+    a:hover { color: var(--note); }
+
+    .wrap {
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 5rem 0 6rem;
+    }
+
+    header { margin-bottom: 3.5rem; }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--bright);
+      letter-spacing: -1px;
+    }
+
+    .tagline { color: var(--muted); font-size: 0.9rem; margin-top: 0.4rem; }
+
+    nav {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1.4rem;
+      font-size: 0.82rem;
+    }
+
+    nav a { color: var(--muted); text-decoration: none; }
+    nav a:hover { color: var(--bright); }
+    nav a.active { color: var(--bright); border-bottom: 1px solid var(--bright); padding-bottom: 1px; }
+
+    section { margin-bottom: 3.5rem; }
+
+    h2 {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+    }
+
+    p { font-size: 0.9rem; line-height: 1.8; margin-bottom: 0.8rem; }
+
+    /* command table */
+    .cmd-list {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.81rem;
+    }
+
+    .cmd-list tr { border-bottom: 1px solid var(--border); }
+    .cmd-list tr:last-child { border-bottom: none; }
+
+    .cmd-list td { padding: 0.55rem 0; vertical-align: top; }
+    .cmd-list td:first-child { color: var(--bright); width: 50%; padding-right: 1rem; }
+    .cmd-list td:last-child { color: var(--muted); }
+
+    .cmd-list .group-label td {
+      color: var(--muted);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding-top: 1.2rem;
+      padding-bottom: 0.3rem;
+      border-bottom: none;
+    }
+
+    /* terminal */
+    .term {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+
+    .term-bar {
+      background: var(--border);
+      padding: 0.45rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); }
+
+    .term-body {
+      padding: 1.1rem 1.3rem;
+      font-size: 0.81rem;
+      line-height: 2;
+      overflow-x: auto;
+    }
+
+    .term-body pre { white-space: pre; }
+
+    .c-prompt { color: var(--muted); }
+    .c-cmd    { color: var(--bright); }
+    .c-note   { color: var(--note); font-weight: 700; }
+    .c-cmd-t  { color: var(--cmd);  font-weight: 700; }
+    .c-todo   { color: var(--todo); font-weight: 700; }
+    .c-warn   { color: var(--warn); font-weight: 700; }
+    .c-snap   { color: var(--snap); font-weight: 700; }
+    .c-dim    { color: var(--muted); }
+
+    /* hook box */
+    .hook-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--warn);
+      border-radius: 0 6px 6px 0;
+      padding: 1rem 1.2rem;
+      font-size: 0.81rem;
+      margin: 0.75rem 0;
+    }
+
+    .hook-box .hook-title {
+      color: var(--warn);
+      font-weight: 700;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+
+    .hook-box code { color: var(--bright); display: block; margin-top: 0.4rem; }
+    .hook-box .hook-desc { color: var(--muted); font-size: 0.76rem; margin-top: 0.5rem; }
+
+    /* info box */
+    .info-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--note);
+      border-radius: 0 6px 6px 0;
+      padding: 1rem 1.2rem;
+      font-size: 0.81rem;
+      margin: 0.75rem 0;
+      color: var(--muted);
+    }
+
+    .info-box code { color: var(--bright); }
+
+    footer {
+      margin-top: 4rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.76rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    @media (max-width: 520px) {
+      .wrap { padding: 3rem 0 4rem; }
+      .logo { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="logo">tuck</div>
+    <div class="tagline">project-aware scratchpad for developers</div>
+    <nav>
+      <a href="index.html">home</a>
+      <a href="docs.html" class="active">docs</a>
+      <a href="https://github.com/Malaydewangan09/tuck">github</a>
+    </nav>
+  </header>
+
+  <section>
+    <h2>Commands</h2>
+    <table class="cmd-list">
+      <tr class="group-label"><td colspan="2">save</td></tr>
+      <tr><td>tuck note "text"</td><td>save a note</td></tr>
+      <tr><td>tuck cmd  "text"</td><td>save a runnable command</td></tr>
+      <tr><td>tuck todo "text"</td><td>save a todo item</td></tr>
+      <tr><td>tuck warn "text"</td><td>save a warning</td></tr>
+      <tr><td>tuck snap</td><td>snapshot current branch, ports, runtime versions</td></tr>
+
+      <tr class="group-label"><td colspan="2">view</td></tr>
+      <tr><td>tuck ls</td><td>list all entries for current project</td></tr>
+      <tr><td>tuck grep &lt;term&gt;</td><td>search across all projects</td></tr>
+      <tr><td>tuck summary</td><td>one-line count, for shell prompt</td></tr>
+
+      <tr class="group-label"><td colspan="2">act</td></tr>
+      <tr><td>tuck run &lt;id&gt;</td><td>execute a saved command</td></tr>
+      <tr><td>tuck done &lt;id&gt;</td><td>toggle todo done / undone</td></tr>
+      <tr><td>tuck rm &lt;id&gt;</td><td>remove an entry</td></tr>
+      <tr><td>tuck clear</td><td>remove all entries for current project</td></tr>
+
+      <tr class="group-label"><td colspan="2">team</td></tr>
+      <tr><td>tuck team</td><td>show team mode status</td></tr>
+      <tr><td>tuck team on</td><td>enable team mode, share notes via git</td></tr>
+      <tr><td>tuck team off</td><td>disable team mode</td></tr>
+      <tr><td>tuck team sync</td><td>merge teammates notes after git pull</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>snap</h2>
+    <p>Captures a snapshot of the current development environment and saves it as an entry.</p>
+    <p>Records: git branch, listening ports, node / go / python versions.</p>
+
+    <div class="term">
+      <div class="term-bar"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <div class="term-body"><pre>
+<span class="c-prompt">$</span> <span class="c-cmd">tuck snap</span>
+<span class="c-snap">SNAP</span> saved  <span class="c-dim">#4</span>
+  <span class="c-dim">branch=main  ports=3000,5432,6379  node=20.11.0  go=1.21.0</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>team mode</h2>
+    <p>
+      The <code style="color:var(--bright)">.tuck</code> file lives in the project directory.
+      Committing it shares your notes with anyone who pulls the repo.
+    </p>
+
+    <div class="term">
+      <div class="term-bar"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <div class="term-body"><pre>
+<span class="c-prompt">$</span> <span class="c-cmd">tuck team on</span>
+<span class="c-cmd-t">team mode on</span>
+<span class="c-dim">commit .tuck to share notes with teammates.</span>
+
+<span class="c-prompt">$</span> <span class="c-cmd">git add .tuck && git commit -m "add project notes"</span>
+
+<span class="c-dim"># teammate pulls and syncs</span>
+<span class="c-prompt">$</span> <span class="c-cmd">tuck team sync</span>
+<span class="c-cmd-t">+3</span> entries synced from teammates</pre>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <code>tuck team sync</code> merges by content hash. Duplicate entries are skipped automatically.
+    </div>
+  </section>
+
+  <section>
+    <h2>Shell hook</h2>
+    <p>Add to <code style="color:var(--bright)">~/.zshrc</code> or <code style="color:var(--bright)">~/.bashrc</code> to see a summary on every directory change:</p>
+
+    <div class="hook-box">
+      <div class="hook-title">tip</div>
+      <code>function cd() { builtin cd "$@" && tuck summary; }</code>
+      <div class="hook-desc">
+        On entering a project directory you will see:<br>
+        <span style="color:var(--warn)">1 warn</span> &nbsp;
+        <span style="color:var(--todo)">2 todo</span> &nbsp;
+        <span style="color:var(--cmd)">1 cmd</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>How it works</h2>
+    <p>
+      Each project stores a <code style="color:var(--bright)">.tuck</code> file in its root directory.
+      A global index at <code style="color:var(--bright)">~/.tuck-index</code> enables cross-project search.
+      No daemon, no server, no cloud. Just files.
+    </p>
+  </section>
+
+  <footer>
+    <span>tuck v0.2.0 · <a href="https://github.com/Malaydewangan09/tuck">github</a></span>
+    <span>built by <a href="https://github.com/Malaydewangan09">malaydewangan09</a></span>
+  </footer>
+
+</div>
+</body>
+</html>

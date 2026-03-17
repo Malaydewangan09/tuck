@@ -10,20 +10,18 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:       #0e0e0e;
-      --surface:  #161616;
-      --border:   #252525;
-      --muted:    #555;
-      --text:     #d4d4d4;
-      --bright:   #f0f0f0;
-      --note:     #22d3ee;
-      --cmd:      #4ade80;
-      --todo:     #818cf8;
-      --warn:     #fbbf24;
-      --accent:   #f0f0f0;
+      --bg:      #0e0e0e;
+      --surface: #161616;
+      --border:  #252525;
+      --muted:   #555;
+      --text:    #d4d4d4;
+      --bright:  #f0f0f0;
+      --note:    #22d3ee;
+      --cmd:     #4ade80;
+      --todo:    #818cf8;
+      --warn:    #fbbf24;
+      --snap:    #d946ef;
     }
-
-    html { font-size: 16px; }
 
     body {
       background: var(--bg);
@@ -37,12 +35,11 @@
     a:hover { color: var(--note); }
 
     .wrap {
-      max-width: 680px;
+      max-width: 660px;
       margin: 0 auto;
       padding: 5rem 0 6rem;
     }
 
-    /* header */
     header { margin-bottom: 3.5rem; }
 
     .logo {
@@ -60,24 +57,34 @@
 
     .badges {
       display: flex;
-      gap: 1rem;
+      gap: 0.75rem;
       margin-top: 1.2rem;
       flex-wrap: wrap;
     }
 
     .badge {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--muted);
       border: 1px solid var(--border);
       padding: 0.2rem 0.6rem;
       border-radius: 4px;
     }
 
-    /* sections */
+    nav {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1.4rem;
+      font-size: 0.82rem;
+    }
+
+    nav a { color: var(--muted); text-decoration: none; }
+    nav a:hover { color: var(--bright); }
+    nav a.active { color: var(--bright); border-bottom: 1px solid var(--bright); padding-bottom: 1px; }
+
     section { margin-bottom: 3rem; }
 
     h2 {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       text-transform: uppercase;
       letter-spacing: 2px;
       color: var(--muted);
@@ -87,48 +94,41 @@
     }
 
     p {
-      color: var(--text);
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       line-height: 1.8;
       margin-bottom: 0.8rem;
     }
 
-    /* types grid */
+    /* types */
     .types {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-      margin-top: 0.5rem;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.6rem;
+      margin-top: 0.75rem;
     }
 
     .type-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 0.9rem 1rem;
+      padding: 0.8rem 1rem;
     }
 
     .type-label {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
       letter-spacing: 1px;
       text-transform: uppercase;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.25rem;
     }
 
-    .type-card p {
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin: 0;
-    }
+    .type-card p { font-size: 0.76rem; color: var(--muted); margin: 0; }
 
     .type-card.note .type-label { color: var(--note); }
     .type-card.cmd  .type-label { color: var(--cmd);  }
     .type-card.todo .type-label { color: var(--todo); }
     .type-card.warn .type-label { color: var(--warn); }
     .type-card.snap .type-label { color: var(--snap); }
-
-    :root { --snap: #d946ef; }
 
     /* terminal */
     .term {
@@ -141,21 +141,17 @@
 
     .term-bar {
       background: var(--border);
-      padding: 0.5rem 1rem;
+      padding: 0.45rem 1rem;
       display: flex;
       align-items: center;
       gap: 0.4rem;
     }
 
-    .dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: var(--muted);
-    }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); }
 
     .term-body {
-      padding: 1.2rem 1.4rem;
-      font-size: 0.82rem;
+      padding: 1.1rem 1.3rem;
+      font-size: 0.81rem;
       line-height: 2;
       overflow-x: auto;
     }
@@ -164,12 +160,12 @@
 
     .c-prompt { color: var(--muted); }
     .c-cmd    { color: var(--bright); }
-    .c-note   { color: var(--note); }
-    .c-cmd-t  { color: var(--cmd); }
-    .c-todo   { color: var(--todo); }
-    .c-warn   { color: var(--warn); }
+    .c-note   { color: var(--note); font-weight: 700; }
+    .c-cmd-t  { color: var(--cmd);  font-weight: 700; }
+    .c-todo   { color: var(--todo); font-weight: 700; }
+    .c-warn   { color: var(--warn); font-weight: 700; }
+    .c-snap   { color: var(--snap); font-weight: 700; }
     .c-dim    { color: var(--muted); }
-    .c-bold   { font-weight: 700; }
 
     /* install */
     .install-block {
@@ -177,93 +173,27 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 1.2rem 1.4rem;
-      font-size: 0.82rem;
+      font-size: 0.81rem;
       margin: 0.75rem 0;
     }
 
     .install-block .step {
       color: var(--muted);
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.35rem;
       margin-top: 1rem;
     }
 
     .install-block .step:first-child { margin-top: 0; }
+    .install-block code { color: var(--bright); display: block; }
 
-    .install-block code {
-      color: var(--bright);
-      display: block;
-    }
-
-    /* commands table */
-    .cmd-list {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.82rem;
-      margin-top: 0.5rem;
-    }
-
-    .cmd-list tr {
-      border-bottom: 1px solid var(--border);
-    }
-
-    .cmd-list tr:last-child { border-bottom: none; }
-
-    .cmd-list td {
-      padding: 0.55rem 0;
-      vertical-align: top;
-    }
-
-    .cmd-list td:first-child {
-      color: var(--bright);
-      width: 55%;
-      padding-right: 1rem;
-    }
-
-    .cmd-list td:last-child {
-      color: var(--muted);
-    }
-
-    /* shell hook */
-    .hook-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--warn);
-      border-radius: 0 6px 6px 0;
-      padding: 1rem 1.2rem;
-      font-size: 0.82rem;
-      margin: 0.75rem 0;
-    }
-
-    .hook-box .hook-title {
-      color: var(--warn);
-      font-weight: 700;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 0.5rem;
-    }
-
-    .hook-box code {
-      color: var(--bright);
-      display: block;
-      margin-top: 0.4rem;
-    }
-
-    .hook-box .hook-desc {
-      color: var(--muted);
-      font-size: 0.78rem;
-      margin-top: 0.5rem;
-    }
-
-    /* footer */
     footer {
       margin-top: 4rem;
       padding-top: 1.5rem;
       border-top: 1px solid var(--border);
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       color: var(--muted);
       display: flex;
       justify-content: space-between;
@@ -271,8 +201,8 @@
       gap: 0.5rem;
     }
 
-    @media (max-width: 480px) {
-      .types { grid-template-columns: 1fr; }
+    @media (max-width: 520px) {
+      .types { grid-template-columns: 1fr 1fr; }
       .wrap { padding: 3rem 0 4rem; }
       .logo { font-size: 1.6rem; }
     }
@@ -291,6 +221,11 @@
       <span class="badge">zero dependencies</span>
       <span class="badge">macOS · Linux</span>
     </div>
+    <nav>
+      <a href="index.html" class="active">home</a>
+      <a href="docs.html">docs</a>
+      <a href="https://github.com/Malaydewangan09/tuck">github</a>
+    </nav>
   </header>
 
   <section>
@@ -307,100 +242,53 @@
     <div class="types">
       <div class="type-card note">
         <div class="type-label">note</div>
-        <p>Things worth remembering about this project</p>
+        <p>Things worth remembering</p>
       </div>
       <div class="type-card cmd">
         <div class="type-label">cmd</div>
-        <p>Useful commands you can run directly by ID</p>
+        <p>Commands, runnable by ID</p>
       </div>
       <div class="type-card todo">
         <div class="type-label">todo</div>
-        <p>Tasks with done/undone toggle</p>
+        <p>Tasks with done toggle</p>
       </div>
       <div class="type-card warn">
         <div class="type-label">warn</div>
-        <p>Warnings, shown first, hard to miss</p>
+        <p>Warnings, shown first</p>
       </div>
       <div class="type-card snap">
         <div class="type-label">snap</div>
-        <p>Snapshot of current branch, ports, and runtime versions</p>
+        <p>Env snapshot: branch, ports, runtimes</p>
       </div>
     </div>
   </section>
 
   <section>
-    <h2>See it in action</h2>
-
+    <h2>Quick look</h2>
     <div class="term">
       <div class="term-bar"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
       <div class="term-body"><pre>
-<span class="c-prompt">$</span> <span class="c-cmd">tuck note "postgres runs on 5433 here, not default"</span>
-<span class="c-note c-bold">NOTE</span> saved  <span class="c-dim">#1</span>
+<span class="c-prompt">$</span> <span class="c-cmd">tuck warn "dont touch auth.js, sarah is refactoring"</span>
+<span class="c-warn">WARN</span> saved  <span class="c-dim">#1</span>
 
-<span class="c-prompt">$</span> <span class="c-cmd">tuck warn "dont touch auth.js, sarah is refactoring it"</span>
-<span class="c-warn c-bold">WARN</span> saved  <span class="c-dim">#2</span>
+<span class="c-prompt">$</span> <span class="c-cmd">tuck cmd "docker run -p 5432:5432 postgres:15"</span>
+<span class="c-cmd-t">CMD</span>  saved  <span class="c-dim">#2</span>
 
-<span class="c-prompt">$</span> <span class="c-cmd">tuck cmd  "docker run -p 5432:5432 postgres:15"</span>
-<span class="c-cmd-t c-bold">CMD</span>  saved  <span class="c-dim">#3</span>
-
-<span class="c-prompt">$</span> <span class="c-cmd">tuck todo "add rate limiting to /api/login"</span>
-<span class="c-todo c-bold">TODO</span> saved  <span class="c-dim">#4</span></pre>
-      </div>
-    </div>
-
-    <div class="term">
-      <div class="term-bar"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-      <div class="term-body"><pre>
-<span class="c-prompt">$</span> <span class="c-cmd">tuck ls</span>
-
-<span class="c-bold" style="color:#f0f0f0">backend</span>  <span class="c-dim">/home/user/projects/backend</span>
-
-<span class="c-warn c-bold">WARNS</span>
-  <span class="c-warn c-bold">2</span>  dont touch auth.js, sarah is refactoring it   <span class="c-dim">2h ago</span>
-
-<span class="c-todo c-bold">TODOS</span>
-  <span class="c-todo c-bold">4</span>  [ ] add rate limiting to /api/login             <span class="c-dim">1h ago</span>
-
-<span class="c-cmd-t c-bold">CMDS</span>
-  <span class="c-cmd-t c-bold">3</span>  docker run -p 5432:5432 postgres:15             <span class="c-dim">1h ago</span>
-
-<span class="c-note c-bold">NOTES</span>
-  <span class="c-note c-bold">1</span>  postgres runs on 5433 here, not default         <span class="c-dim">3h ago</span></pre>
-      </div>
-    </div>
-
-    <div class="term">
-      <div class="term-bar"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-      <div class="term-body"><pre>
-<span class="c-prompt">$</span> <span class="c-cmd">tuck run 3</span>
-<span class="c-dim">$ docker run -p 5432:5432 postgres:15</span>
-
-<span class="c-prompt">$</span> <span class="c-cmd">tuck done 4</span>
-<span class="c-cmd-t c-bold">[x] done</span>
-
-<span class="c-prompt">$</span> <span class="c-cmd">tuck grep postgres</span>
-<span class="c-bold" style="color:#f0f0f0">backend</span>  <span class="c-dim">/home/user/projects/backend</span>
-  <span class="c-note c-bold">1</span>  postgres runs on 5433 here, not default  <span class="c-dim">3h ago</span>
-
-<span class="c-bold" style="color:#f0f0f0">infra</span>  <span class="c-dim">/home/user/projects/infra</span>
-  <span class="c-note c-bold">2</span>  postgres maxmemory bumped to 2gb           <span class="c-dim">2d ago</span></pre>
-      </div>
-    </div>
-
-    <div class="term">
-      <div class="term-bar"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-      <div class="term-body"><pre>
 <span class="c-prompt">$</span> <span class="c-cmd">tuck snap</span>
-<span style="color:var(--snap);font-weight:700">SNAP</span> saved  <span class="c-dim">#5</span>
-  <span class="c-dim">branch=main  ports=3000,5432,6379  node=20.11.0  go=1.21.0</span>
+<span class="c-snap">SNAP</span> saved  <span class="c-dim">#3</span>
+  <span class="c-dim">branch=main  ports=3000,5432  node=20.11.0  go=1.21.0</span>
 
-<span class="c-prompt">$</span> <span class="c-cmd">tuck team on</span>
-<span class="c-cmd-t c-bold">team mode on</span>
-<span class="c-dim">commit .tuck to share notes with teammates.</span>
-<span class="c-dim">run tuck team sync after pulling to merge their notes.</span>
+<span class="c-prompt">$</span> <span class="c-cmd">tuck ls</span>
+<span style="color:var(--bright);font-weight:700">backend</span>  <span class="c-dim">/home/user/projects/backend</span>
 
-<span class="c-prompt">$</span> <span class="c-cmd">tuck team sync</span>
-<span class="c-cmd-t c-bold">+3</span> entries synced from teammates</pre>
+<span class="c-warn">WARNS</span>
+  <span class="c-warn">1</span>  dont touch auth.js, sarah is refactoring  <span class="c-dim">5m ago</span>
+
+<span class="c-cmd-t">CMDS</span>
+  <span class="c-cmd-t">2</span>  docker run -p 5432:5432 postgres:15        <span class="c-dim">4m ago</span>
+
+<span class="c-snap">SNAPS</span>
+  <span class="c-snap">3</span>  branch=main  ports=3000,5432  node=20.11.0 <span class="c-dim">just now</span></pre>
       </div>
     </div>
   </section>
@@ -426,53 +314,8 @@
     </div>
   </section>
 
-  <section>
-    <h2>Commands</h2>
-    <table class="cmd-list">
-      <tr><td>tuck note "text"</td><td>save a note</td></tr>
-      <tr><td>tuck cmd  "text"</td><td>save a runnable command</td></tr>
-      <tr><td>tuck todo "text"</td><td>save a todo item</td></tr>
-      <tr><td>tuck warn "text"</td><td>save a warning</td></tr>
-      <tr><td>tuck ls</td><td>list all entries for current project</td></tr>
-      <tr><td>tuck run &lt;id&gt;</td><td>execute a saved command</td></tr>
-      <tr><td>tuck done &lt;id&gt;</td><td>toggle todo done / undone</td></tr>
-      <tr><td>tuck rm &lt;id&gt;</td><td>remove an entry</td></tr>
-      <tr><td>tuck clear</td><td>clear all entries for current project</td></tr>
-      <tr><td>tuck snap</td><td>snapshot current branch, ports, runtime versions</td></tr>
-      <tr><td>tuck grep &lt;term&gt;</td><td>search across all projects</td></tr>
-      <tr><td>tuck summary</td><td>one-line count (for shell prompt)</td></tr>
-      <tr><td>tuck team on / off</td><td>enable or disable team mode</td></tr>
-      <tr><td>tuck team sync</td><td>merge teammates notes after git pull</td></tr>
-    </table>
-  </section>
-
-  <section>
-    <h2>Shell hook</h2>
-    <p>Add to your <code style="color:var(--bright)">~/.zshrc</code> or <code style="color:var(--bright)">~/.bashrc</code> to see a summary every time you enter a project:</p>
-
-    <div class="hook-box">
-      <div class="hook-title">tip</div>
-      <code>function cd() { builtin cd "$@" && tuck summary; }</code>
-      <div class="hook-desc">
-        Every time you cd into a project you'll automatically see:<br>
-        <span style="color:var(--warn)">1 warn</span> &nbsp;
-        <span style="color:var(--todo)">2 todo</span> &nbsp;
-        <span style="color:var(--cmd)">1 cmd</span>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <h2>How it works</h2>
-    <p>
-      Each project stores a <code style="color:var(--bright)">.tuck</code> file in its root directory.
-      A global index at <code style="color:var(--bright)">~/.tuck-index</code> enables cross-project search.
-      No daemon, no server, no cloud. Just files.
-    </p>
-  </section>
-
   <footer>
-    <span>tuck v0.2.0 · <a href="https://github.com/Malaydewangan09/tuck">github</a></span>
+    <span>tuck v0.2.0 · <a href="https://github.com/Malaydewangan09/tuck">github</a> · <a href="docs.html">docs</a></span>
     <span>built by <a href="https://github.com/Malaydewangan09">malaydewangan09</a></span>
   </footer>
 
