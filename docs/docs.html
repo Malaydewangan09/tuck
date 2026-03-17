@@ -6,6 +6,9 @@
   <title>tuck: docs</title>
   <meta name="description" content="Full documentation for tuck." />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -26,9 +29,13 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       line-height: 1.7;
       padding: 0 1.5rem;
+    }
+
+    code, pre, .term-body, .install-block code, nav, .cmd-list td:first-child {
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
     }
 
     a { color: var(--bright); text-decoration: underline; text-underline-offset: 3px; }
