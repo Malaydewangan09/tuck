@@ -276,26 +276,25 @@
       <div class="term-bar"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
       <div class="term-body"><pre>
 <span class="c-prompt">$</span> <span class="c-cmd">tuck warn "dont touch auth.js, sarah is refactoring"</span>
-<span class="c-warn">WARN</span> saved  <span class="c-dim">#1</span>
+<span class="c-warn">warn</span> saved  <span class="c-dim">#1</span>
 
 <span class="c-prompt">$</span> <span class="c-cmd">tuck cmd "docker run -p 5432:5432 postgres:15"</span>
-<span class="c-cmd-t">CMD</span>  saved  <span class="c-dim">#2</span>
+<span class="c-cmd-t">cmd</span> saved  <span class="c-dim">#2</span>
 
 <span class="c-prompt">$</span> <span class="c-cmd">tuck snap</span>
-<span class="c-snap">SNAP</span> saved  <span class="c-dim">#3</span>
-  <span class="c-dim">branch=main  ports=3000,5432  node=20.11.0  go=1.21.0</span>
+<span class="c-snap">snap</span> saved  <span class="c-dim">#3</span>
 
 <span class="c-prompt">$</span> <span class="c-cmd">tuck ls</span>
-<span style="color:var(--bright);font-weight:700">backend</span>  <span class="c-dim">/home/user/projects/backend</span>
+<span style="color:var(--bright);font-weight:700">backend</span>  <span class="c-dim">·  /home/user/projects/backend</span>
 
-<span class="c-warn">WARNS</span>
-  <span class="c-warn">1</span>  dont touch auth.js, sarah is refactoring  <span class="c-dim">5m ago</span>
+<span class="c-warn">warns</span>  <span class="c-dim">1</span>
+  <span class="c-warn">  1</span>  dont touch auth.js, sarah is refactoring  <span class="c-dim">·  5m ago</span>
 
-<span class="c-cmd-t">CMDS</span>
-  <span class="c-cmd-t">2</span>  docker run -p 5432:5432 postgres:15        <span class="c-dim">4m ago</span>
+<span class="c-cmd-t">cmds</span>  <span class="c-dim">1</span>
+  <span class="c-cmd-t">  2</span>  docker run -p 5432:5432 postgres:15        <span class="c-dim">·  4m ago</span>
 
-<span class="c-snap">SNAPS</span>
-  <span class="c-snap">3</span>  branch=main  ports=3000,5432  node=20.11.0 <span class="c-dim">just now</span></pre>
+<span class="c-snap">snaps</span>  <span class="c-dim">1</span>
+  <span class="c-snap">  3</span>  main  <span class="c-dim">·</span>  3000 5432  <span class="c-dim">·</span>  node 20.11  go 1.21  <span class="c-dim">·  just now</span></pre>
       </div>
     </div>
   </section>
