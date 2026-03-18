@@ -115,8 +115,8 @@ func printEntry(e Entry, showProject bool) {
 	}
 
 	text := e.Text
-	if e.Type == TypeSnap && len(text) > 68 {
-		text = text[:68] + "..."
+	if e.Type == TypeSnap {
+		text = formatSnapText(text)
 	}
 	if e.Done {
 		text = fmt.Sprintf("%s%s%s", dim, text, reset)
@@ -131,6 +131,55 @@ func printEntry(e Entry, showProject bool) {
 		bold, color, e.ID, reset,
 		prefix, text,
 		dim, reset, dim, relativeTime(e.CreatedAt), reset+project)
+}
+
+func formatSnapText(raw string) string {
+	kv := map[string]string{}
+	for _, field := range strings.Fields(raw) {
+		if idx := strings.Index(field, "="); idx > 0 {
+			kv[field[:idx]] = field[idx+1:]
+		}
+	}
+
+	parts := []string{}
+
+	if branch := kv["branch"]; branch != "" {
+		parts = append(parts, fmt.Sprintf("%s%s%s", white, branch, reset))
+	}
+
+	if raw, ok := kv["ports"]; ok && raw != "" {
+		ports := strings.Split(raw, ",")
+		display := strings.Join(ports[:min(3, len(ports))], " ")
+		if len(ports) > 3 {
+			display += fmt.Sprintf(" %s+%d%s", dim, len(ports)-3, reset)
+		}
+		parts = append(parts, display)
+	}
+
+	runtimes := []string{}
+	for _, rt := range []string{"node", "go", "python"} {
+		if v := kv[rt]; v != "" {
+			// trim to major.minor only
+			segments := strings.Split(v, ".")
+			short := v
+			if len(segments) >= 2 {
+				short = segments[0] + "." + segments[1]
+			}
+			runtimes = append(runtimes, rt+" "+short)
+		}
+	}
+	if len(runtimes) > 0 {
+		parts = append(parts, strings.Join(runtimes, "  "))
+	}
+
+	return strings.Join(parts, fmt.Sprintf("  %s·%s  ", dim, reset))
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }
 
 func printSummary(entries []Entry) {
