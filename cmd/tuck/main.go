@@ -12,31 +12,34 @@ import (
 const version = "0.2.0"
 const appName = "tuck"
 
-const usage = `tuck - nothing gets forgotten
+func printHelp() {
+	fmt.Printf("\n%s%stuck%s  %snothing gets forgotten%s\n\n", bold, white, reset, dim, reset)
 
-usage:
-  tuck note <text>       save a note
-  tuck cmd  <text>       save a command
-  tuck todo <text>       save a todo item
-  tuck warn <text>       save a warning
-  tuck snap              snapshot current env (branch, ports, runtimes)
+	fmt.Printf("%sSAVE%s\n", bold, reset)
+	fmt.Printf("  %stuck note%s <text>       save a note\n", cyan, reset)
+	fmt.Printf("  %stuck cmd%s  <text>       save a runnable command\n", green, reset)
+	fmt.Printf("  %stuck todo%s <text>       save a todo item\n", blue, reset)
+	fmt.Printf("  %stuck warn%s <text>       save a warning\n", yellow, reset)
+	fmt.Printf("  %stuck snap%s              snapshot branch, ports, runtimes\n", magenta, reset)
 
-  tuck ls                list all entries for current project
-  tuck run <id>          run a saved command
-  tuck done <id>         mark todo as done / undone
-  tuck rm <id>           remove an entry
-  tuck clear             remove all entries for current project
+	fmt.Printf("\n%sVIEW%s\n", bold, reset)
+	fmt.Printf("  %stuck ls%s               list all entries for current project\n", dim, reset)
+	fmt.Printf("  %stuck grep%s <term>      search across all projects\n", dim, reset)
+	fmt.Printf("  %stuck summary%s          one-line count for shell prompt\n", dim, reset)
 
-  tuck grep <term>       search across all projects
-  tuck summary           show one-line summary (for shell prompt)
+	fmt.Printf("\n%sACT%s\n", bold, reset)
+	fmt.Printf("  %stuck run%s <id>         execute a saved command\n", dim, reset)
+	fmt.Printf("  %stuck done%s <id>        toggle todo done / undone\n", dim, reset)
+	fmt.Printf("  %stuck rm%s <id>          remove an entry\n", dim, reset)
+	fmt.Printf("  %stuck clear%s            remove all entries for current project\n", dim, reset)
 
-  tuck team              show team mode status
-  tuck team on           enable team mode (share notes via git)
-  tuck team off          disable team mode
-  tuck team sync         merge teammates notes after git pull
+	fmt.Printf("\n%sTEAM%s\n", bold, reset)
+	fmt.Printf("  %stuck team on%s          share notes with teammates via git\n", dim, reset)
+	fmt.Printf("  %stuck team sync%s        merge teammates notes after pull\n", dim, reset)
+	fmt.Printf("  %stuck team off%s         disable team mode\n", dim, reset)
 
-  tuck version           show version
-`
+	fmt.Printf("\n%sv%s%s\n\n", dim, version, reset)
+}
 
 func main() {
 	args := os.Args[1:]
@@ -75,17 +78,13 @@ func main() {
 	case "help", "--help", "-h":
 		printHelp()
 	default:
-		// treat as shorthand: tuck "text" → jot note "text"
+		// treat as shorthand: tuck "text" → tuck note "text"
 		if len(cmd) > 0 && cmd[0] != '-' {
 			cmdAdd(TypeNote, args)
 		} else {
 			printHelp()
 		}
 	}
-}
-
-func printHelp() {
-	fmt.Print(usage)
 }
 
 func cmdAdd(t EntryType, args []string) {
@@ -114,7 +113,7 @@ func cmdAdd(t EntryType, args []string) {
 	}
 
 	color := colorFor(t)
-	fmt.Printf("%s%s%s saved  %s#%d%s\n", color, bold, strings.ToUpper(string(t)), dim, e.ID, reset)
+	fmt.Printf("\n  %s%s %s%s  %s#%d  %s%s\n\n", bold, color, strings.ToUpper(string(t)), reset, dim, e.ID, relativeTime(e.CreatedAt), reset)
 }
 
 func cmdList() {

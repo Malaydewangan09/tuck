@@ -69,7 +69,7 @@ func relativeTime(t time.Time) string {
 
 func printEntries(entries []Entry) {
 	if len(entries) == 0 {
-		fmt.Printf("%s  nothing here yet. try: tuck note \"something useful\"%s\n", dim, reset)
+		fmt.Printf("\n%s  nothing here yet%s\n  %stry: tuck note \"something useful\"%s\n\n", dim, reset, dim, reset)
 		return
 	}
 
@@ -79,6 +79,7 @@ func printEntries(entries []Entry) {
 		groups[e.Type] = append(groups[e.Type], e)
 	}
 
+	fmt.Println()
 	first := true
 	for _, t := range order {
 		group := groups[t]
@@ -91,11 +92,12 @@ func printEntries(entries []Entry) {
 		first = false
 
 		color := colorFor(t)
-		fmt.Printf("%s%s%s%s\n", bold, color, strings.ToUpper(string(t))+"S", reset)
+		fmt.Printf("  %s%s%s%s\n", bold, color, strings.ToUpper(string(t))+"S", reset)
 		for _, e := range group {
 			printEntry(e, false)
 		}
 	}
+	fmt.Println()
 }
 
 func printEntry(e Entry, showProject bool) {
@@ -122,7 +124,7 @@ func printEntry(e Entry, showProject bool) {
 	}
 
 	fmt.Printf("  %s%s%d%s  %s%s  %s%s%s\n",
-		color, bold, e.ID, reset,
+		bold, color, e.ID, reset,
 		prefix, text,
 		timeStr, project, reset)
 }
