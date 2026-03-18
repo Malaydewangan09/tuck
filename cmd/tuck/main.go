@@ -40,7 +40,7 @@ func main() {
 	args := os.Args[1:]
 
 	if len(args) == 0 {
-		printHelp()
+		cmdStatus()
 		return
 	}
 
@@ -109,6 +109,17 @@ func cmdAdd(t EntryType, args []string) {
 
 	color := colorFor(t)
 	fmt.Printf("\n  %s%s %s%s  %s#%d  %s%s\n\n", bold, color, strings.ToUpper(string(t)), reset, dim, e.ID, relativeTime(e.CreatedAt), reset)
+}
+
+func cmdStatus() {
+	s, err := loadStore(localStorePath())
+	if err != nil || len(s.Entries) == 0 {
+		dir, _ := os.Getwd()
+		project := filepath.Base(dir)
+		fmt.Printf("%s%s%s  %sno entries yet%s  try: tuck note \"something useful\"\n", bold, project, reset, dim, reset)
+		return
+	}
+	cmdList()
 }
 
 func cmdList() {
