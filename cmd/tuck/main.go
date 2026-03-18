@@ -13,26 +13,25 @@ const version = "0.2.0"
 const appName = "tuck"
 
 func printHelp() {
-	fmt.Printf("\n  %s%stuck%s  %snothing gets forgotten%s  %sv%s%s\n", bold, white, reset, dim, reset, dim, version, reset)
-	fmt.Printf("  %s─────────────────────────────────────%s\n\n", dim, reset)
+	fmt.Printf("\n  %s%stuck%s  %snothing gets forgotten%s  %sv%s%s\n\n", bold, white, reset, dim, reset, dim, version, reset)
 
 	fmt.Printf("  %sSAVE%s\n", bold, reset)
-	fmt.Printf("  %s·%s tuck %snote%s <text>    save a note\n", dim, reset, cyan, reset)
-	fmt.Printf("  %s·%s tuck %scmd%s  <text>    save a runnable command\n", dim, reset, green, reset)
-	fmt.Printf("  %s·%s tuck %stodo%s <text>    save a todo item\n", dim, reset, blue, reset)
-	fmt.Printf("  %s·%s tuck %swarn%s <text>    save a warning\n", dim, reset, yellow, reset)
-	fmt.Printf("  %s·%s tuck %ssnap%s           snapshot branch, ports, runtimes\n", dim, reset, magenta, reset)
+	fmt.Printf("  tuck %snote%s <text>    save a note\n", cyan, reset)
+	fmt.Printf("  tuck %scmd%s  <text>    save a runnable command\n", green, reset)
+	fmt.Printf("  tuck %stodo%s <text>    save a todo item\n", blue, reset)
+	fmt.Printf("  tuck %swarn%s <text>    save a warning\n", yellow, reset)
+	fmt.Printf("  tuck %ssnap%s           snapshot branch, ports, runtimes\n", magenta, reset)
 
 	fmt.Printf("\n  %sVIEW & ACT%s\n", bold, reset)
-	fmt.Printf("  %s·%s tuck %sls%s             list entries for current project\n", dim, reset, white, reset)
-	fmt.Printf("  %s·%s tuck %srun%s <id>       execute a saved command\n", dim, reset, white, reset)
-	fmt.Printf("  %s·%s tuck %sdone%s <id>      toggle todo done / undone\n", dim, reset, white, reset)
-	fmt.Printf("  %s·%s tuck %srm%s <id>        remove an entry\n", dim, reset, white, reset)
-	fmt.Printf("  %s·%s tuck %sgrep%s <term>    search across all projects\n", dim, reset, white, reset)
+	fmt.Printf("  tuck %sls%s             list entries for current project\n", dim, reset)
+	fmt.Printf("  tuck %srun%s <id>       execute a saved command\n", dim, reset)
+	fmt.Printf("  tuck %sdone%s <id>      toggle todo done / undone\n", dim, reset)
+	fmt.Printf("  tuck %srm%s <id>        remove an entry\n", dim, reset)
+	fmt.Printf("  tuck %sgrep%s <term>    search across all projects\n", dim, reset)
 
 	fmt.Printf("\n  %sTEAM%s\n", bold, reset)
-	fmt.Printf("  %s·%s tuck %steam on%s        share notes via git\n", dim, reset, white, reset)
-	fmt.Printf("  %s·%s tuck %steam sync%s      merge teammates notes after pull\n", dim, reset, white, reset)
+	fmt.Printf("  tuck %steam on%s        share notes via git\n", dim, reset)
+	fmt.Printf("  tuck %steam sync%s      merge teammates notes after pull\n", dim, reset)
 
 	fmt.Printf("\n")
 }
