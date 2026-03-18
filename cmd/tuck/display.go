@@ -92,7 +92,8 @@ func printEntries(entries []Entry) {
 		first = false
 
 		color := colorFor(t)
-		fmt.Printf("  %s%s%s%s\n", bold, color, strings.ToUpper(string(t))+"S", reset)
+		label := string(t) + "s"
+		fmt.Printf("  %s%s%s%s  %s%d%s\n", bold, color, label, reset, dim, len(group), reset)
 		for _, e := range group {
 			printEntry(e, false)
 		}
@@ -103,7 +104,6 @@ func printEntries(entries []Entry) {
 
 func printEntry(e Entry, showProject bool) {
 	color := colorFor(e.Type)
-	timeStr := fmt.Sprintf("%s%s%s", dim, relativeTime(e.CreatedAt), reset)
 
 	prefix := ""
 	if e.Type == TypeTodo {
@@ -115,19 +115,22 @@ func printEntry(e Entry, showProject bool) {
 	}
 
 	text := e.Text
+	if e.Type == TypeSnap && len(text) > 68 {
+		text = text[:68] + "..."
+	}
 	if e.Done {
 		text = fmt.Sprintf("%s%s%s", dim, text, reset)
 	}
 
 	project := ""
 	if showProject && e.Project != "" {
-		project = fmt.Sprintf(" %s[%s]%s", dim, e.Project, reset)
+		project = fmt.Sprintf("  %s[%s]%s", dim, e.Project, reset)
 	}
 
-	fmt.Printf("    %s%s%d%s  %s%s  %s%s%s\n",
+	fmt.Printf("  %s%s%3d%s  %s%s  %s·%s %s%s%s\n",
 		bold, color, e.ID, reset,
 		prefix, text,
-		timeStr, project, reset)
+		dim, reset, dim, relativeTime(e.CreatedAt), reset+project)
 }
 
 func printSummary(entries []Entry) {
