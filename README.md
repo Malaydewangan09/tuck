@@ -1,6 +1,6 @@
 # tuck
 
-A project-aware scratchpad for developers. Stores notes, commands, todos, and warnings in the project directory, searchable across projects.
+A nothing gets forgotten. Stores notes, commands, todos, and warnings in the project directory, searchable across projects.
 
 ## Install
 
