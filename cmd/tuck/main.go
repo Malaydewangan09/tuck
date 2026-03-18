@@ -120,7 +120,7 @@ func cmdList() {
 
 	dir, _ := os.Getwd()
 	project := filepath.Base(dir)
-	fmt.Printf("%s%s%s  %s%s%s\n\n", bold, project, reset, dim, dir, reset)
+	fmt.Printf("\n  %s%s%s  %s%s%s\n", bold, project, reset, dim, dir, reset)
 
 	printEntries(s.Entries)
 }

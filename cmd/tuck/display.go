@@ -96,6 +96,7 @@ func printEntries(entries []Entry) {
 		for _, e := range group {
 			printEntry(e, false)
 		}
+
 	}
 	fmt.Println()
 }
@@ -123,7 +124,7 @@ func printEntry(e Entry, showProject bool) {
 		project = fmt.Sprintf(" %s[%s]%s", dim, e.Project, reset)
 	}
 
-	fmt.Printf("  %s%s%d%s  %s%s  %s%s%s\n",
+	fmt.Printf("    %s%s%d%s  %s%s  %s%s%s\n",
 		bold, color, e.ID, reset,
 		prefix, text,
 		timeStr, project, reset)
