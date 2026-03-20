@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"bufio"
 )
 
 const version = "0.2.0"
@@ -26,8 +27,13 @@ func printHelp() {
 	fmt.Printf("  tuck %sls%s             list entries for current project\n", dim, reset)
 	fmt.Printf("  tuck %srun%s <id>       execute a saved command\n", dim, reset)
 	fmt.Printf("  tuck %sdone%s <id>      toggle todo done / undone\n", dim, reset)
+	fmt.Printf("  tuck %sedit%s <id>      edit an entry in $EDITOR\n", dim, reset)
 	fmt.Printf("  tuck %srm%s <id>        remove an entry\n", dim, reset)
-	fmt.Printf("  tuck %sgrep%s <term>    search across all projects\n", dim, reset)
+	fmt.Printf("  tuck %sgrep%s <term>    search entries across all projects\n", dim, reset)
+
+	fmt.Printf("\n  %sSHELL%s\n", bold, reset)
+	fmt.Printf("  tuck %shook install%s   show summary on every cd\n", dim, reset)
+	fmt.Printf("  tuck %shook uninstall%s remove the shell hook\n", dim, reset)
 
 	fmt.Printf("\n  %sTEAM%s\n", bold, reset)
 	fmt.Printf("  tuck %steam on%s        share notes via git\n", dim, reset)
@@ -66,6 +72,10 @@ func main() {
 		cmdSummary()
 	case "snap":
 		cmdSnap()
+	case "edit":
+		cmdEdit(rest)
+	case "hook":
+		cmdHook(rest)
 	case "team":
 		cmdTeam(rest)
 	case "version", "--version", "-v":
@@ -300,6 +310,174 @@ func cmdGrep(args []string) {
 			printEntry(e.Entry, false)
 		}
 	}
+}
+
+func cmdEdit(args []string) {
+	if len(args) == 0 {
+		fmt.Fprintf(os.Stderr, "error: provide an entry id\n")
+		os.Exit(1)
+	}
+	id, err := strconv.Atoi(args[0])
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error: invalid id\n")
+		os.Exit(1)
+	}
+
+	s, err := loadStore(localStorePath())
+	if err != nil {
+		fatal(err)
+	}
+
+	e := s.get(id)
+	if e == nil {
+		fmt.Fprintf(os.Stderr, "error: entry #%d not found\n", id)
+		os.Exit(1)
+	}
+
+	// write current text to a temp file
+	tmp, err := os.CreateTemp("", "tuck-edit-*.txt")
+	if err != nil {
+		fatal(err)
+	}
+	defer os.Remove(tmp.Name())
+	if _, err := tmp.WriteString(e.Text); err != nil {
+		fatal(err)
+	}
+	tmp.Close()
+
+	editor := os.Getenv("EDITOR")
+	if editor == "" {
+		editor = os.Getenv("VISUAL")
+	}
+	if editor == "" {
+		editor = "vi"
+	}
+
+	c := exec.Command(editor, tmp.Name())
+	c.Stdin = os.Stdin
+	c.Stdout = os.Stdout
+	c.Stderr = os.Stderr
+	if err := c.Run(); err != nil {
+		fatal(err)
+	}
+
+	data, err := os.ReadFile(tmp.Name())
+	if err != nil {
+		fatal(err)
+	}
+	text := strings.TrimSpace(string(data))
+	if text == "" || text == e.Text {
+		fmt.Printf("%sno changes%s\n", dim, reset)
+		return
+	}
+
+	if !s.update(id, text) {
+		fmt.Fprintf(os.Stderr, "error: entry #%d not found\n", id)
+		os.Exit(1)
+	}
+	if err := s.save(); err != nil {
+		fatal(err)
+	}
+
+	dir, _ := os.Getwd()
+	idx, _ := loadIndex()
+	if idx != nil {
+		idx.sync(dir, s.Entries)
+		idx.save()
+	}
+
+	color := colorFor(e.Type)
+	fmt.Printf("\n  %s%s %s%s  %s#%d  updated%s\n\n", bold, color, strings.ToUpper(string(e.Type)), reset, dim, id, reset)
+}
+
+const hookBlock = "# tuck shell hook\nfunction cd() { builtin cd \"$@\" && tuck summary; }\n# end tuck hook"
+
+func cmdHook(args []string) {
+	if len(args) == 0 {
+		fmt.Printf("usage: tuck hook [install|uninstall]\n")
+		return
+	}
+	switch args[0] {
+	case "install":
+		cmdHookInstall()
+	case "uninstall":
+		cmdHookUninstall()
+	default:
+		fmt.Fprintf(os.Stderr, "usage: tuck hook [install|uninstall]\n")
+		os.Exit(1)
+	}
+}
+
+func shellRCPath() string {
+	home, _ := os.UserHomeDir()
+	shell := filepath.Base(os.Getenv("SHELL"))
+	switch shell {
+	case "zsh":
+		return filepath.Join(home, ".zshrc")
+	case "fish":
+		return filepath.Join(home, ".config", "fish", "config.fish")
+	default:
+		return filepath.Join(home, ".bashrc")
+	}
+}
+
+func cmdHookInstall() {
+	rc := shellRCPath()
+
+	data, _ := os.ReadFile(rc)
+	if strings.Contains(string(data), "tuck shell hook") {
+		fmt.Printf("%shook already installed in %s%s\n", dim, rc, reset)
+		return
+	}
+
+	f, err := os.OpenFile(rc, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		fatal(err)
+	}
+	defer f.Close()
+	fmt.Fprintf(f, "\n%s\n", hookBlock)
+
+	fmt.Printf("%s%shook installed%s  %s%s%s\n", bold, green, reset, dim, rc, reset)
+	fmt.Printf("%srestart your shell or run: source %s%s\n", dim, rc, reset)
+}
+
+func cmdHookUninstall() {
+	rc := shellRCPath()
+
+	data, err := os.ReadFile(rc)
+	if err != nil {
+		fatal(err)
+	}
+
+	content := string(data)
+	if !strings.Contains(content, "tuck shell hook") {
+		fmt.Printf("%shook not found in %s%s\n", dim, rc, reset)
+		return
+	}
+
+	// remove the hook block line by line
+	var kept []string
+	inBlock := false
+	scanner := bufio.NewScanner(strings.NewReader(content))
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.Contains(line, "# tuck shell hook") {
+			inBlock = true
+		}
+		if !inBlock {
+			kept = append(kept, line)
+		}
+		if strings.Contains(line, "# end tuck hook") {
+			inBlock = false
+		}
+	}
+
+	if err := os.WriteFile(rc, []byte(strings.Join(kept, "\n")), 0644); err != nil {
+		fatal(err)
+	}
+
+	fmt.Printf("%s%shook removed%s  %s%s%s\n", bold, yellow, reset, dim, rc, reset)
+	fmt.Printf("%srestart your shell or run: source %s%s\n", dim, rc, reset)
 }
 
 func cmdSummary() {

@@ -110,3 +110,14 @@ func (s *Store) toggleDone(id int) bool {
 	}
 	return false
 }
+
+func (s *Store) update(id int, text string) bool {
+	for i, e := range s.Entries {
+		if e.ID == id {
+			s.Entries[i].Text = text
+			_ = e
+			return true
+		}
+	}
+	return false
+}
