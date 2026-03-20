@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <title>tuck</title>
   <rect width="32" height="32" rx="6" fill="#0e0e0e"/>
-  <!-- note with dog-eared bottom-right corner -->
-  <path d="M 8 7 L 24 7 L 24 19 L 18 25 L 8 25 Z" fill="#e8e8e8"/>
-  <!-- folded corner: green accent -->
-  <path d="M 24 19 L 18 25 L 24 25 Z" fill="#34d399"/>
+  <!-- envelope body -->
+  <rect x="5" y="14" width="22" height="13" rx="1.5" fill="#e8e8e8"/>
+  <!-- open flap pointing up: the "tuck" motion -->
+  <path d="M 5 14 L 16 7 L 27 14 Z" fill="#34d399"/>
 </svg>
