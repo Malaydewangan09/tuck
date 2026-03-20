@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <title>tuck</title>
   <rect width="32" height="32" rx="6" fill="#0e0e0e"/>
-  <!-- white stem -->
-  <rect x="14" y="12" width="4" height="15" rx="2" fill="#e8e8e8"/>
-  <!-- green crossbar: the tuck line -->
-  <rect x="5" y="8" width="22" height="4.5" rx="2" fill="#34d399"/>
+  <!-- green crossbar -->
+  <rect x="5" y="7" width="22" height="4.5" rx="2.2" fill="#34d399"/>
+  <!-- white stem: gap between crossbar and stem reads as the tuck fold -->
+  <rect x="14" y="13" width="4" height="14" rx="2" fill="#e8e8e8"/>
 </svg>
