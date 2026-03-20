@@ -52,10 +52,18 @@
     header { margin-bottom: 3.5rem; }
 
     .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       font-size: 2rem;
       font-weight: 700;
       color: var(--bright);
       letter-spacing: -1px;
+    }
+
+    .logo img {
+      width: 36px;
+      height: 36px;
     }
 
     .tagline {
@@ -221,7 +229,7 @@
 <div class="wrap">
 
   <header>
-    <div class="logo">tuck</div>
+    <div class="logo"><img src="favicon.svg" alt="tuck" />tuck</div>
     <div class="tagline">nothing gets forgotten</div>
     <div class="badges">
       <span class="badge">v0.2.0</span>
