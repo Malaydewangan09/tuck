@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <title>tuck</title>
-  <rect width="32" height="32" rx="6" fill="#0e0e0e"/>
-  <!-- bookmark body -->
-  <path d="M 8 4 L 24 4 L 24 28 L 16 22 L 8 28 Z" fill="#e8e8e8"/>
-  <!-- green V-notch: the saved marker -->
-  <path d="M 8 28 L 16 22 L 24 28 Z" fill="#34d399"/>
+  <rect width="32" height="32" rx="8" fill="#0e0e0e"/>
+  <!-- stacked note lines -->
+  <rect x="7" y="9"  width="18" height="2.5" rx="1.25" fill="#e8e8e8"/>
+  <rect x="7" y="15" width="12" height="2.5" rx="1.25" fill="#e8e8e8"/>
+  <rect x="7" y="21" width="15" height="2.5" rx="1.25" fill="#34d399"/>
 </svg>
