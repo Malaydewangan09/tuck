@@ -1,10 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <title>tuck</title>
   <rect width="32" height="32" rx="8" fill="#0e0e0e"/>
-  <!-- T: the name, in amber -->
-  <rect x="6"    y="7"  width="20" height="3"   rx="1.5" fill="#f59e0b"/>
-  <rect x="14.5" y="10" width="3"  height="6"   rx="1.5" fill="#f59e0b"/>
-  <!-- content lines: the scratchpad -->
-  <rect x="6" y="20" width="20" height="2" rx="1" fill="#e8e8e8" opacity="0.45"/>
-  <rect x="6" y="24" width="14" height="2" rx="1" fill="#e8e8e8" opacity="0.25"/>
+  <!-- map pin / thumbtack: pin this note -->
+  <path d="M 16 3 C 8 3 6 9 6 13 C 6 19 11 23 13.5 25 L 16 29 L 18.5 25 C 21 23 26 19 26 13 C 26 9 24 3 16 3 Z"
+        fill="#f59e0b"/>
+  <!-- inner circle: the note -->
+  <circle cx="16" cy="13" r="4.5" fill="#0e0e0e" opacity="0.2"/>
 </svg>
